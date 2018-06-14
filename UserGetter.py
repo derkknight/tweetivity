@@ -14,9 +14,6 @@ with open('config.json', 'r') as file:
 
 CONSUMER_KEY = config['CONSUMER_KEY']
 CONSUMER_SECRET = config['CONSUMER_SECRET']
-ACCESS_TOKEN = config['ACCESS_TOKEN']
-ACCESS_TOKEN_SECRET = config['ACCESS_TOKEN_SECRET']
-
 
 twitter = Twython(CONSUMER_KEY, CONSUMER_SECRET)
 
