@@ -1,0 +1,8 @@
+Sample Stuff/
+include/
+Lib/
+tcl/
+Scripts/
+config.json
+pip-selfcheck.json
+.vscode/
