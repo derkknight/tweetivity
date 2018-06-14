@@ -1,8 +1,6 @@
 Sample Stuff/
-include/
-Lib/
-tcl/
-Scripts/
+venv/
 config.json
 pip-selfcheck.json
 .vscode/
+tweetivity.pyc
