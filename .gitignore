@@ -3,4 +3,4 @@ venv/
 config.json
 pip-selfcheck.json
 .vscode/
-tweetivity.pyc
+*.pyc
