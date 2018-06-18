@@ -2,12 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <style>
-    .circle {
-       fill: #222;
-    }
-    </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -17,81 +13,12 @@
 </head>
 <body>
     <h1>Tweetify</h1>
-    <div id="graphDiv"></div>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script>
-        //console.log("lol")
-        //console.log({{ data|tojson }})
-        var hoursData = JSON.parse({{data|tojson}})[4]
-        console.log(hoursData)
-        console.log()
-        //var hoursData = [24,21,22,20,13,14,15,17,19,1,2,3,4,5,2,3,4,5,6,7,23,1,12,16]
-
-        var y_label = "";
-        var width = 800;
-        var height = 500;
-        var padding = 50;
-        var margin = 50;
-
-        var ticks = 10
-
-
-        var x = d3.scale.linear().domain([0,23]).range([0,width])
-        var y = d3.scale.linear().domain([0,Math.max.apply(Math, hoursData) + 5]).range([height,0])
-
-        var xAxis = d3.svg.axis().scale(x)
-            .orient("bottom").ticks(25)
-            .tickFormat(function (d, i) {return i});
-
-        var yAxis = d3.svg.axis().scale(y)
-            .orient("left").ticks(ticks);
-
-        var svg = d3.select("#graphDiv").append("svg")
-            .attr("width", width + padding + margin)
-            .attr("height", height + padding)
-
-        svg.append("g")
-            .attr("class", "axis")
-            .attr("transform", "translate(" + padding + "," + height + ")")
-            .call(xAxis)
-
-        //Labels
-        svg.append("text")
-            .attr("transform", "translate(" + width/2 + "," + (height + margin) +")")
-            .text("Hours");
-        
-        //Labels
-        svg.append("text")
-            .attr("x", 0 - height/2)
-            .attr("y", 0 + padding/2)
-            .attr("transform", "rotate(-90)")
-            .text("Active Users");
-
-
-        svg.append("g")
-            .attr("class", "axis")
-            .attr("transform", "translate(" + padding + ", 0)")
-            .call(yAxis)
-
-        var line = d3.svg.line()
-            .x(function(d, i) { return x(i)})
-            .y(function(d) {console.log(d); return y(d)})
-
-        svg.append("path")
-            .attr("stroke", "blue")
-            .attr("fill", "none")
-            .attr("d", line(hoursData))
-            .attr("transform", "translate(" + padding + "," + "0)")
-
-        svg.selectAll("circle")
-            .data(hoursData)
-            .enter()
-            .append("circle")
-            .attr("class", "circle")
-            .attr("r", 3.5)
-            .attr("cx", function(d, i) { return x(i) + padding })
-            .attr("cy", function(d, i) { return y(d) })
-        
-    </script>
+    <form onsubmit="window.location.href = '/' + document.getElementById('screen_name').value; return false;">
+            <div class="form-group">
+                    <label for="usr">Twitter Handle:</label>
+                    <input type="text" class="form-control" id="screen_name">
+                    <input type="submit" class="btn" value="Submit"/>
+            </div>
+    </form>
 </body>
 </html>

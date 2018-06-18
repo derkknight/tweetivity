@@ -3,14 +3,13 @@ import TweetMunger as tm
 app = Flask(__name__)
  
 @app.route("/")
-def hello():
+def index():
     return render_template('index.html')
 
 @app.route("/<string:name>/")
 def getFollowers(name):
     data = tm.return_tweet_summary(name)
-    print(data)
-    return render_template('index.html', data = data)
+    return render_template('graph.html', data = data)
 
 if __name__ == "__main__":
     app.run()
