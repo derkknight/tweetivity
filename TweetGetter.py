@@ -14,7 +14,7 @@ with open('config.json', 'r') as file:
     config = json.load(file)
 CONSUMER_KEY = config['CONSUMER_KEY']
 CONSUMER_SECRET = config['CONSUMER_SECRET']
-twitter = Twython(CONSUMER_KEY, CONSUMER_SECRET)
+#twitter = Twython(CONSUMER_KEY, CONSUMER_SECRET)
 
 # Returns a list of user_ids of followers
 def get_followers_of_user(screen_name):
@@ -36,7 +36,7 @@ def get_follower_statuses(follower_id, list):
             tweet = []
             tweet.extend(follower_id, tweet_id, timestamp)
             list.append(str(follower_id) + ',' + str(tweet_id) + ',' + timestamp)
-        print list
+        #print list
     except twython.exceptions.TwythonAuthError:
         pass
 
@@ -49,18 +49,18 @@ def get_datetime_from_tweet(string):
 
 # Using the DataFrame and given a day (0=Mon, 6=Sun), find all entries in that day
 def get_tweets_by_day(df, day):
-    print(df[df.index.weekday==day])
+    #print(df[df.index.weekday==day])
     return df[df.index.weekday==day]
 
 # Using the DataFrame and given an hour, find all entries in that hour
 def get_tweets_by_hour(df, hour):
-    print(df[df.index.hour==hour])
+    #print(df[df.index.hour==hour])
     return df[df.index.hour==hour]
 
 
 ###Crunch stuff
 def get_report(screen_name):
-    followers = get_followers_of_user(screen_name)
+    #followers = get_followers_of_user(screen_name)
     tweets = get_follower_statuses_canned()
     # get_follower_statuses()
     df = load_data(tweets)
@@ -68,10 +68,10 @@ def get_report(screen_name):
     report_dict = {}
     while day < 6:
         day_frame = get_tweets_by_day(df, day)
-        day_dict = {}
+        day_dict = []
         hour = 0
         while hour < 24:
-            day_dict[hour] = get_number_of_users(get_tweets_by_hour(day_frame, hour))
+            day_dict.append(get_number_of_users(get_tweets_by_hour(day_frame, hour)))
             hour += 1
         report_dict[day] = day_dict
         day += 1

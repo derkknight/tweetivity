@@ -9,7 +9,8 @@ def hello():
 @app.route("/<string:name>/")
 def getFollowers(name):
     data = tm.return_tweet_summary(name)
-    return render_template('index.html', data)
+    print(data)
+    return render_template('index.html', data = data)
 
 if __name__ == "__main__":
     app.run()
