@@ -19,18 +19,27 @@
         stroke: #6E7B8B;
         text-align: center;
     }
+
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-light" style="background-color: #1da1f2">
         <div class="container-fluid">
-            <a style="text-align: center; position: absolute; width: 100%; left: 0;" href="/">Tweetivity</a>
+            <a class="navbar-brand" style="color: white; text-align: center; width: 100%;" href="/">Tweetivity</a>
         </div>
     </nav>
 </head>
 <body>
-    <div id="graphDiv" style="text-align: center"></div>
+    <div class="container">
+        <div class="col-md-8">
+            <h1>Active Followers of @name</h1>
+            <div id="graphDiv"></div>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-primary">Whoa man</button>
+        </div>
+    </div>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script>
         //console.log("lol")
@@ -144,9 +153,9 @@
             hoverLine.classed("hide", true);
         }
  
-        $('#graph').mouseenter(function(event){console.log("enter"); onMouseEnter(event);})
-        $('#graph').mousemove(function(event){console.log("hello"); onMouseHover(event);})
-        $('#graph').mouseleave(function(event){console.log("bye"); onMouseExit(event);})
+        $('#graph').mouseenter(function(event){onMouseEnter(event);})
+        $('#graph').mousemove(function(event){onMouseHover(event);})
+        $('#graph').mouseleave(function(event){onMouseExit(event);})
     </script>
 </body>
 </html>
