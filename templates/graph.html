@@ -6,6 +6,10 @@
     .circle {
        fill: #1da1f2;
     }
+    .card {
+        fill: white;
+        stroke: #6E7B8B;
+    }
     #graph .axis path {
         fill: none;
         stroke:#6E7B8B;
@@ -18,6 +22,18 @@
     .hover-line {
         stroke: #6E7B8B;
         text-align: center;
+    }
+
+    div.tooltip {
+        border: solid;
+        border-color: #6E7B8B;
+        border-width: 1px;
+        position: absolute;
+        text-align: left;
+        padding: 10px;
+        background: white;
+        border-radius: 8px;
+        pointer-events: none;
     }
 
     </style>
@@ -40,14 +56,18 @@
             <button class="btn btn-primary">Whoa man</button>
         </div>
     </div>
+
+    <!-- 
+    <div id="card" class="panel panel-default" style="width: 100px;">
+        <div class="panel-body">
+            <p>1,000,000,000 active users</p>
+        </div>
+    </div>
+    -->
+    
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script>
-        //console.log("lol")
-        //console.log({{ data|tojson }})
         var hoursData = JSON.parse({{data|tojson}})[4]
-        console.log(hoursData)
-        console.log()
-        //var hoursData = [24,21,22,20,13,14,15,17,19,1,2,3,4,5,2,3,4,5,6,7,23,1,12,16]
 
         var y_label = "";
         var width = 800;
@@ -56,10 +76,6 @@
         var margin = 50;
 
         var ticks = 10
-
-
-        
-
 
         var x = d3.scale.linear().domain([0,23]).range([0,width])
         var y = d3.scale.linear().domain([0,Math.max.apply(Math, hoursData) + 5]).range([height,0])
@@ -71,10 +87,13 @@
         var yAxis = d3.svg.axis().scale(y)
             .orient("left").ticks(ticks);
 
-        var svg = d3.select("#graphDiv").append("svg")
+        var graphDiv = d3.select("#graphDiv")
+
+        var svg = graphDiv.append("svg")
             .attr("width", width + padding + margin)
             .attr("height", height + padding)
             .attr("id", "graph")
+
 
         var hoverLineGroup = svg.append("g")
             .attr("class", "hover-line");
@@ -101,7 +120,6 @@
             .attr("transform", "rotate(-90)")
             .text("Active Users");
 
-
         svg.append("g")
             .attr("class", "axis")
             .attr("transform", "translate(" + padding + ", 0)")
@@ -116,15 +134,62 @@
             .attr("d", line(hoursData))
             .attr("transform", "translate(" + padding + "," + "0)")
 
-        svg.selectAll("circle")
+        var circles = svg.selectAll("circle")
             .data(hoursData)
-            .enter()
+            .enter().append("g")
+
+        var div = graphDiv.append("div").attr("class", "tooltip");
+
+        var onCircleHovered = function(d, i)
+        {
+            div.transition()
+                .duration(200)
+                .style("opacity", 1);
+            div.html("<span class='glyphicon glyphicon-user'></span> " + d + " Active Users")
+                .attr("class", "tooltip")
+                .style("left", (x(i) + padding) + "px")
+                .style("top", (y(d) - 10) + "px" )
+        }
+
+
+        
+        var onCircleLeave = function(d, i)
+        {
+            div.transition().duration(500).style("opacity", 0);
+        }
+
+        circles
             .append("circle")
             .attr("class", "circle")
-            .attr("r", 3.5)
+            .attr("r", 9)
             .attr("cx", function(d, i) { return x(i) + padding })
             .attr("cy", function(d, i) { return y(d) })
+            .on("mouseover", onCircleHovered)
+            .on("mouseleave", onCircleLeave)
         
+
+
+        circles.append("rect")
+            .attr("class", "card hide")
+            .attr("id", function(d, i) { return i + "-card"})
+            .attr("x", function(d, i) { return x(i) + padding - (120/2)} )
+            .attr("y", function(d) { return y(d) - (70/2) - 50 } )
+            .attr("rx", "10")
+            .attr("ry", "10")
+            .attr("height", "70px")
+            .attr("width", "120px")
+            .text("lmao")
+        
+        circles.append("text")
+            .attr("class", "glyphicon glyphicon-user hide")
+            .attr("id", function(d, i) { return i + "-text"})
+            .attr("x", function(d, i) { return x(i) + padding - (120/2) + 10} )
+            .attr("y", function(d) { return y(d) - (70/2) - 30} )
+            .attr("height", "70px")
+            .attr("width", "120px")
+            .text(function (d) { return d + "active followers"})
+
+
         var onMouseHover = function(event)
         {
             //var mouseX = event.pageX - width/2 - margin - margin
@@ -152,6 +217,7 @@
         {
             hoverLine.classed("hide", true);
         }
+
  
         $('#graph').mouseenter(function(event){onMouseEnter(event);})
         $('#graph').mousemove(function(event){onMouseHover(event);})
