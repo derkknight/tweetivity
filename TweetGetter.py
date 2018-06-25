@@ -81,6 +81,7 @@ def get_report_x(screen_name):
 def get_report(screen_name):
     tweets = get_follower_statuses_canned()
     df = load_data(tweets)
+    df = df.values.tolist()
     return df
     
 
@@ -117,5 +118,6 @@ def get_follower_statuses_canned():
 def initialize():
     tweets = get_follower_statuses_canned()
     report = get_report(tweets)
+    print report
 
 initialize()
