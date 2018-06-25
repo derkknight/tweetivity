@@ -49,7 +49,7 @@
 <body>
     <div class="container">
         <div class="col-md-8">
-            <h1>Active Followers of @name</h1>
+            <h1>Active Followers of @{{name}}</h1>
             <div id="graphDiv"></div>
         </div>
         <div class="col-md-4">
@@ -77,12 +77,16 @@
 
         var ticks = 10
 
-        var x = d3.scale.linear().domain([0,23]).range([0,width])
+        var parseDate = d3.time.format("").parse
+
+        //var x = d3.scale.linear().domain([0,23]).range([0,width])
+        var x = d3.time.scale().domain([new Date(hours = 0), new Date(hours = 23)]).range([0, width])
         var y = d3.scale.linear().domain([0,Math.max.apply(Math, hoursData) + 5]).range([height,0])
 
         var xAxis = d3.svg.axis().scale(x)
-            .orient("bottom").ticks(25)
-            .tickFormat(function (d, i) {return i});
+            .orient("bottom").ticks(d3.time.hours, 1)
+            .tickFormat(d3.time.format("%H %p"));
+            //.tickFormat(function (d, i) {return i});
 
         var yAxis = d3.svg.axis().scale(y)
             .orient("left").ticks(ticks);
