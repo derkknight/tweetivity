@@ -67,7 +67,7 @@
     
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script>
-        var hoursData = JSON.parse({{data|tojson}})[4]
+        var hoursData = JSON.parse({{data|tojson}})
 
         var y_label = "";
         var width = 800;
@@ -77,10 +77,14 @@
 
         var ticks = 10
 
-        var parseDate = d3.time.format("").parse
+        var parseDate = d3.time.format("%Y-%m-%d %X").parse;
 
-        //var x = d3.scale.linear().domain([0,23]).range([0,width])
-        var x = d3.time.scale().domain([new Date(hours = 0), new Date(hours = 23)]).range([0, width])
+        var bins = d3.histogram().domain([0,23]).thresholds(23);
+
+        console.log(hoursData)
+
+        var x = d3.scale.linear().domain([0,23]).range([0,width])
+        //var x = d3.time.scale().domain([new Date(hours = 0), new Date(hours = 23)]).range([0, width])
         var y = d3.scale.linear().domain([0,Math.max.apply(Math, hoursData) + 5]).range([height,0])
 
         var xAxis = d3.svg.axis().scale(x)

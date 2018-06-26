@@ -118,6 +118,3 @@ def get_follower_statuses_canned():
 def initialize():
     tweets = get_follower_statuses_canned()
     report = get_report(tweets)
-    print report
-
-initialize()
