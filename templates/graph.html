@@ -49,7 +49,7 @@
 <body>
     <div class="container">
         <div class="col-md-8">
-            <h1>Active Followers of @name</h1>
+            <h1>Active Followers of @{{name}}</h1>
             <div id="graphDiv"></div>
         </div>
         <div class="col-md-4">
@@ -57,17 +57,12 @@
         </div>
     </div>
 
-    <!-- 
-    <div id="card" class="panel panel-default" style="width: 100px;">
-        <div class="panel-body">
-            <p>1,000,000,000 active users</p>
-        </div>
-    </div>
-    -->
     
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script>
-        var hoursData = JSON.parse({{data|tojson}})
+        var hoursData = JSON.parse({{data|tojson}})[4]
+
+        console.log(hoursData)
 
         var y_label = "";
         var width = 800;

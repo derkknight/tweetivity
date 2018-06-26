@@ -59,7 +59,7 @@ def get_tweets_by_hour(df, hour):
 
 
 ###Crunch stuff
-def get_report_x(screen_name):
+def get_report(screen_name):
     #followers = get_followers_of_user(screen_name)
     tweets = get_follower_statuses_canned()
     # get_follower_statuses()
@@ -76,14 +76,6 @@ def get_report_x(screen_name):
         report_dict[day] = day_dict
         day += 1
     return report_dict
-
-
-def get_report(screen_name):
-    tweets = get_follower_statuses_canned()
-    df = load_data(tweets)
-    df = df.values.tolist()
-    return df
-    
 
 # Gets the count of unique users.
 def get_number_of_users(df):
