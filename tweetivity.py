@@ -9,7 +9,7 @@ def index():
 @app.route("/<string:name>/")
 def getFollowers(name):
     data = tm.return_tweet_summary(name)
-    return render_template('graph.html', data = data, name = name)
+    return render_template('graph.html', data = data)
 
 if __name__ == "__main__":
     app.run()
