@@ -14,11 +14,11 @@ with open('config.json', 'r') as file:
     config = json.load(file)
 CONSUMER_KEY = config['CONSUMER_KEY']
 CONSUMER_SECRET = config['CONSUMER_SECRET']
-#twitter = Twython(CONSUMER_KEY, CONSUMER_SECRET)
+twitter = Twython(CONSUMER_KEY, CONSUMER_SECRET)
 
 # Returns a list of user_ids of followers
 def get_followers_of_user(screen_name):
-    return twitter.get_followers_ids(screen_name = "nisellaneous")["ids"]
+    return twitter.get_followers_ids(screen_name = screen_name)["ids"]
 
 # Given a list of raw tweets, load in the data and return a pandas DataFrame
 def load_data(tweets):
@@ -33,10 +33,14 @@ def get_follower_statuses(follower_id, list):
     try:
         for status in twitter.get_user_timeline(user_id=follower_id, include_rts=True, count=200):
             tweet_id = status["id"]
-            timestamp = datetime.strptime(status["created_at"].encode('utf-8')[4:16], '%b %d %H:%M')
+            #timestamp = datetime.strptime(status["created_at"].encode('utf-8')[4:16], '%b %d %H:%M')
+            timestamp = status["created_at"].encode('utf-8')
             tweet = []
-            tweet.extend(follower_id, tweet_id, timestamp)
-            list.append(str(follower_id) + ',' + str(tweet_id) + ',' + timestamp)
+            tweet.append(str(follower_id))
+            tweet.append(str(tweet_id))
+            tweet.append(get_datetime_from_tweet(timestamp))
+            list.append(tweet)
+            #list.append(str(follower_id) + ',' + str(tweet_id) + ',' + timestamp)
         #print list
     except twython.exceptions.TwythonAuthError:
         pass
@@ -96,15 +100,22 @@ def get_report_x(screen_name):
     return report_dict
 
 def get_report(screen_name):
-    tweets = get_follower_statuses_canned()
+    followers = get_followers_of_user(screen_name)
+    tweets = []
+    for follower in followers:
+        get_follower_statuses(follower, tweets)
+    #tweets = get_follower_statuses_canned()
     df = load_data(tweets)
-    df = get_tweets_by_week(df, 5)
+    df = get_tweets_by_week(df, 3)
     df = average_day(df)
     report_dict = []
     hour = 0;
     while hour < 24:
         #get the mean of each hour
-        mean = int(np.ceil(get_tweets_by_hour(df, hour)["Follower ID"].mean()))
+        meanFloat = get_tweets_by_hour(df, hour)["Follower ID"].mean()
+        mean = 0
+        if (np.isnan(meanFloat) == False):
+            mean = int(np.ceil(meanFloat))
         report_dict.append(mean)
         hour += 1
     return report_dict
@@ -143,5 +154,3 @@ def get_follower_statuses_canned():
 def initialize():
     tweets = get_follower_statuses_canned()
     report = get_report(tweets)
-
-initialize()
