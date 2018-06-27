@@ -14,6 +14,12 @@
         fill: none;
         stroke:#6E7B8B;
     }
+
+    #graph .axis line {
+        stroke: #6E7B8B;
+        stroke-width: 2px;
+    }
+
     #graph path {
         fill: none;
         stroke: #6abef1;
@@ -60,12 +66,12 @@
     
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script>
-        var hoursData = JSON.parse({{data|tojson}})[4]
+        var hoursData = JSON.parse({{data|tojson}})
 
-        console.log(hoursData)
+        console.log(JSON.parse({{data|tojson}}))
 
         var y_label = "";
-        var width = 800;
+        var width = 1000;
         var height = 500;
         var padding = 50;
         var margin = 50;
@@ -77,7 +83,7 @@
 
         var xAxis = d3.svg.axis().scale(x)
             .orient("bottom").ticks(25)
-            .tickFormat(function (d, i) {return i});
+            .tickFormat(function (d, i) {if (i == 0) return "12 AM"; else if (i < 12) return (i) + " AM";  else if (i == 12) return i + " PM"; else return (i - 12) + " PM" });
 
         var yAxis = d3.svg.axis().scale(y)
             .orient("left").ticks(ticks);
@@ -111,7 +117,7 @@
         //Labels
         svg.append("text")
             .attr("x", 0 - height/2)
-            .attr("y", 0 + padding/2)
+            .attr("y", 0 + padding/2 - 15)
             .attr("transform", "rotate(-90)")
             .text("Active Users");
 
