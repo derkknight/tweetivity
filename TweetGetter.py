@@ -24,6 +24,7 @@ def get_followers_of_user(screen_name):
 def load_data(tweets):
     df = DataFrame(data=tweets, columns=['Follower ID', 'Tweet ID', 'Timestamp'])
     df.set_index(pd.DatetimeIndex(df['Timestamp']), inplace=True)
+    df = df.tz_localize((240*10*6)*-1, level=0)
     return df
 
 # 
@@ -54,6 +55,7 @@ def average_day(df):
     
 def get_tweets_by_week(df, week):
     lol = datetime.today() - timedelta(weeks = week)
+    print lol
     #print df[(df.index > lol.strftime("%Y-%m-%d")) & (df.index <= datetime.today().strftime("%Y-%m-%d"))]
     return df[(df.index > lol.strftime("%Y-%m-%d")) & (df.index <= datetime.today().strftime("%Y-%m-%d"))]
 
@@ -96,7 +98,7 @@ def get_report_x(screen_name):
 def get_report(screen_name):
     tweets = get_follower_statuses_canned()
     df = load_data(tweets)
-    df = get_tweets_by_week(df, 7)
+    df = get_tweets_by_week(df, 5)
     df = average_day(df)
     report_dict = []
     hour = 0;

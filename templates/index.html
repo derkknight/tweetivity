@@ -44,8 +44,12 @@
     <script>
         function onFormSubmit()
         {
+            var offset = new Date().getTimezoneOffset();
+            console.log(offset)
+
             $("#form-container").addClass("hide")
             $("#loader").removeClass("hide")
+            window.location.href = '/' + document.getElementById('screen_name').value + '/' + offset;
         }
     </script>
     <nav class="navbar navbar-light" style="background-color: #1da1f2">
@@ -57,7 +61,10 @@
 <body>
     <div class="flex-row main">
         <div id="form-container">
-            <form onsubmit="window.location.href = '/' + document.getElementById('screen_name').value; return false;">
+            <!--
+            <form id="form" onsubmit="window.location.href = '/' + document.getElementById('screen_name').value + '/' + offset; return false;">
+            -->
+            <form id="form" onsubmit="onFormSubmit(); return false;">
                     <div class="form-group text-center" >
                         <div class="row">
                             <div class="col-md-12">
@@ -69,7 +76,7 @@
                                 <input class="form-control input-lg" placeholder="Twitter Handle (ex. @twitter)" type="text" id="screen_name">
                             </div>
                             <div class="col-md-4">
-                                <input class="btn btn-lg btn-block btn-primary" type="submit" class="btn" onclick="onFormSubmit()" value="Submit"/>
+                                <input class="btn btn-lg btn-block btn-primary" type="submit" class="btn" value="Submit"/>
                             </div>
                         </div>
                     </div>
