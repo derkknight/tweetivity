@@ -8,6 +8,7 @@ def index():
 
 @app.route("/<string:name>/<string:offset>")
 def getFollowers(name, offset):
+    tm.setTimezone(int(offset))
     data = tm.return_tweet_summary(name)
     return render_template('graph.html', data = data, name = name)
 

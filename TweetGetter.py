@@ -9,12 +9,17 @@ import time
 import csv
 import json
 
+timezone = 0
+
 # Initialize 
 with open('config.json', 'r') as file:
     config = json.load(file)
 CONSUMER_KEY = config['CONSUMER_KEY']
 CONSUMER_SECRET = config['CONSUMER_SECRET']
 twitter = Twython(CONSUMER_KEY, CONSUMER_SECRET)
+
+def set_timezone(utcoffset):
+    timezone = utcoffset
 
 # Returns a list of user_ids of followers
 def get_followers_of_user(screen_name):
@@ -24,7 +29,7 @@ def get_followers_of_user(screen_name):
 def load_data(tweets):
     df = DataFrame(data=tweets, columns=['Follower ID', 'Tweet ID', 'Timestamp'])
     df.set_index(pd.DatetimeIndex(df['Timestamp']), inplace=True)
-    df = df.tz_localize((240*10*6)*-1, level=0)
+    df = df.tz_localize((timezone*10*6)*-1, level=0)
     return df
 
 # 
@@ -53,7 +58,8 @@ def average_day(df):
     #day_frame = get_tweets_by_day(df, 1).resample(rule='24H', closed='left', label='left', base = 17)
     #day_frame = get_tweets_by_day(df, 1).resample(rule='24H').sum()
     #print(get_tweets_by_day(df, 0))
-    day_frame = get_tweets_by_day(df, 0).groupby(pd.Grouper(freq='1H')).nunique()
+    day = int(datetime.today().strftime("%w"))
+    day_frame = get_tweets_by_day(df, day).groupby(pd.Grouper(freq='1H')).nunique()
     day_frame = day_frame[(day_frame.T != 0).any()]
     return day_frame
     
@@ -153,4 +159,5 @@ def get_follower_statuses_canned():
 
 def initialize():
     tweets = get_follower_statuses_canned()
+    get_report("nisellaneous")
     report = get_report(tweets)

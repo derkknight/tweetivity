@@ -6,6 +6,9 @@ def convertDateTime(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
 
+def setTimezone(offset):
+    tg.set_timezone(offset)
+
 def return_tweet_summary(screen_name):
     report = tg.get_report(screen_name)
     return json.dumps(report, default = convertDateTime)
