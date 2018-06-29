@@ -45,19 +45,10 @@ def get_follower_statuses(follower_id, list):
             tweet.append(str(tweet_id))
             tweet.append(get_datetime_from_tweet(timestamp))
             list.append(tweet)
-            #list.append(str(follower_id) + ',' + str(tweet_id) + ',' + timestamp)
-        #print list
     except twython.exceptions.TwythonAuthError:
         pass
 
 def average_day(df):
-    #df.groupby('Timestamp', [pd.cut(df.index.hour, pd.date_range("00:00", "23:59", freq="60min").time)]).mean()
-    #print (pd.date_range("00:00", "23:59", freq="60min").time)
-    #print (df.index.time)
-    #print (pd.cut(df.index.time, pd.date_range("00:00", "23:59", freq="60min").time))
-    #day_frame = get_tweets_by_day(df, 1).resample(rule='24H', closed='left', label='left', base = 17)
-    #day_frame = get_tweets_by_day(df, 1).resample(rule='24H').sum()
-    #print(get_tweets_by_day(df, 0))
     day = int(datetime.today().strftime("%w"))
     day_frame = get_tweets_by_day(df, day).groupby(pd.Grouper(freq='1H')).nunique()
     day_frame = day_frame[(day_frame.T != 0).any()]
@@ -74,42 +65,18 @@ def get_datetime_from_tweet(string):
 
 # Using the DataFrame and given a day (0=Mon, 6=Sun), find all entries in that day
 def get_tweets_by_day(df, day):
-    #print (df)
-    #print(df[df.index.weekday==day])
     return df[df.index.weekday==day]
 
 # Using the DataFrame and given an hour, find all entries in that hour
 def get_tweets_by_hour(df, hour):
-    #print(df[df.index.hour==hour])
     return df[df.index.hour==hour]
 
-
-###Crunch stuff
-def get_report_x(screen_name):
-    #followers = get_followers_of_user(screen_name)
-    tweets = get_follower_statuses_canned()
-    # get_follower_statuses()
-    df = load_data(tweets)
-    average_day(df)
-    day = 0
-    report_dict = {}
-    while day < 6:
-        day_frame = get_tweets_by_day(df, day)
-        day_dict = []
-        hour = 0
-        while hour < 24:
-            day_dict.append(get_number_of_users(get_tweets_by_hour(day_frame, hour)))
-            hour += 1
-        report_dict[day] = day_dict
-        day += 1
-    return report_dict
 
 def get_report(screen_name):
     followers = get_followers_of_user(screen_name)
     tweets = []
     for follower in followers:
         get_follower_statuses(follower, tweets)
-    #tweets = get_follower_statuses_canned()
     df = load_data(tweets)
     df = get_tweets_by_week(df, 3)
     df = average_day(df)
@@ -129,12 +96,6 @@ def get_report(screen_name):
 # Gets the count of unique users.
 def get_number_of_users(df):
     return df['Follower ID'].unique().size
-
-
-
-
-
-
 
 def mainone():
     tweets = get_follower_statuses_canned()
