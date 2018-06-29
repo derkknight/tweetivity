@@ -5,6 +5,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from logging.config import dictConfig
 import datetime
+from TweetGetter import TooManyFollowersException
 
 app = Flask(__name__)
 
@@ -13,6 +14,9 @@ app = Flask(__name__)
 def unhandled_exception(e):
     return render_template('index.html', error = "An error has occurred. Please try again."), 500
 
+@app.errorhandler(TooManyFollowersException)
+def toomanyfollowers_exception(e):
+    return render_template('index.html', error = "This user has too many followers to compute at a reasonable time."), 500
 
 @app.route("/")
 def index():

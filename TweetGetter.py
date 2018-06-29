@@ -9,6 +9,9 @@ import time
 import csv
 import json
 
+class TooManyFollowersException(Exception):
+    pass
+
 timezone = 0
 
 # Initialize 
@@ -23,7 +26,10 @@ def set_timezone(utcoffset):
 
 # Returns a list of user_ids of followers
 def get_followers_of_user(screen_name):
-    return twitter.get_followers_ids(screen_name = screen_name)["ids"]
+    followers = twitter.get_followers_ids(screen_name = screen_name)["ids"]
+    if (len(followers) > 400):
+        return -1
+    return followers
 
 # Given a list of raw tweets, load in the data and return a pandas DataFrame
 def load_data(tweets):
@@ -72,6 +78,8 @@ def get_tweets_by_hour(df, hour):
 
 def get_report(screen_name):
     followers = get_followers_of_user(screen_name)
+    if (followers == -1):
+        raise TooManyFollowersException("High volume of followers. Can't compute.")
     tweets = []
     for follower in followers:
         get_follower_statuses(follower, tweets)
