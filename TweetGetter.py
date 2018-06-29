@@ -38,7 +38,6 @@ def get_follower_statuses(follower_id, list):
     try:
         for status in twitter.get_user_timeline(user_id=follower_id, include_rts=True, count=200):
             tweet_id = status["id"]
-            #timestamp = datetime.strptime(status["created_at"].encode('utf-8')[4:16], '%b %d %H:%M')
             timestamp = status["created_at"].encode('utf-8')
             tweet = []
             tweet.append(str(follower_id))
@@ -56,7 +55,6 @@ def average_day(df):
     
 def get_tweets_by_week(df, week):
     lol = datetime.today() - timedelta(weeks = week)
-    #print df[(df.index > lol.strftime("%Y-%m-%d")) & (df.index <= datetime.today().strftime("%Y-%m-%d"))]
     return df[(df.index > lol.strftime("%Y-%m-%d")) & (df.index <= datetime.today().strftime("%Y-%m-%d"))]
 
 # Helper function to convert string to datetime
@@ -115,9 +113,3 @@ def get_follower_statuses_canned():
             row[2] = get_datetime_from_tweet(row[2])
             tweets.append(row)
     return tweets
-
-
-def initialize():
-    tweets = get_follower_statuses_canned()
-    get_report("nisellaneous")
-    report = get_report(tweets)
