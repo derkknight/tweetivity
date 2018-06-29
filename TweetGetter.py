@@ -65,7 +65,6 @@ def average_day(df):
     
 def get_tweets_by_week(df, week):
     lol = datetime.today() - timedelta(weeks = week)
-    print lol
     #print df[(df.index > lol.strftime("%Y-%m-%d")) & (df.index <= datetime.today().strftime("%Y-%m-%d"))]
     return df[(df.index > lol.strftime("%Y-%m-%d")) & (df.index <= datetime.today().strftime("%Y-%m-%d"))]
 
