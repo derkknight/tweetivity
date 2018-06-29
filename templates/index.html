@@ -44,12 +44,15 @@
     <script>
         function onFormSubmit()
         {
-            var offset = new Date().getTimezoneOffset();
-            console.log(offset)
+            if (document.getElementById('screen_name').value)
+            {
+                var offset = new Date().getTimezoneOffset();
+                console.log(offset)
 
-            $("#form-container").addClass("hide")
-            $("#loader").removeClass("hide")
-            window.location.href = '/' + document.getElementById('screen_name').value + '/' + offset;
+                $("#form-container").addClass("hide")
+                $("#loader").removeClass("hide")
+                window.location.href = '/' + document.getElementById('screen_name').value + '/' + offset;
+            }
         }
     </script>
     <nav class="navbar navbar-light" style="background-color: #1da1f2">
