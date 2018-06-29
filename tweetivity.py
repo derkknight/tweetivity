@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask.logging import default_handler
 import TweetMunger as tm
 import logging
@@ -16,7 +16,7 @@ def unhandled_exception(e):
 
 @app.route("/")
 def index():
-    app.logger.info('LANDED')
+    app.logger.info('LANDED: ' + request.remote_addr )
     return render_template('index.html')
 
 @app.route("/<string:name>/<string:offset>")
