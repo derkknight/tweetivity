@@ -103,12 +103,6 @@ def get_report(screen_name):
 def get_number_of_users(df):
     return df['Follower ID'].unique().size
 
-def mainone():
-    tweets = get_follower_statuses_canned()
-    df = load_data(tweets)
-    monday = get_tweets_by_day(df, 1)
-    get_tweets_by_hour(monday, 1)
-
 def get_follower_statuses_canned():
     tweets = []
     with open('sample_tweets.csv', 'rb') as csvfile:
